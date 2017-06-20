@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Development on A Hugo website</title>
+    <title>Development on Explorations</title>
     <link>/tags/development/</link>
-    <description>Recent content in Development on A Hugo website</description>
+    <description>Recent content in Development on Explorations</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
+    <copyright>&amp;copy; 2017. All rights reserved.</copyright>
     <lastBuildDate>Sat, 17 Jun 2017 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/development/index.xml" rel="self" type="application/rss+xml" />
@@ -13,10 +13,10 @@
     
     <item>
       <title>First Post</title>
-      <link>/2017/06/17/first-post/</link>
+      <link>/post/first-post/</link>
       <pubDate>Sat, 17 Jun 2017 00:00:00 +0000</pubDate>
       
-      <guid>/2017/06/17/first-post/</guid>
+      <guid>/post/first-post/</guid>
       <description></description>
     </item>
     
