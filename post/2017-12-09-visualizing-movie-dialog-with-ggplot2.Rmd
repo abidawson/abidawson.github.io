@@ -5,7 +5,7 @@ date: '2017-12-09'
 slug: visualizing-movie-dialog-with-ggplot2
 categories: []
 tags: []
-draft: true
+draft: false
 ---
 
 Some intro text.
