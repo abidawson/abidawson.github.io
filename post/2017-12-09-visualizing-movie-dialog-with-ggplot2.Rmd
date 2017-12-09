@@ -1,0 +1,11 @@
+---
+title: Visualizing Movie Dialog with ggplot2
+author: Abi Dawson
+date: '2017-12-09'
+slug: visualizing-movie-dialog-with-ggplot2
+categories: []
+tags: []
+draft: false
+---
+
+Some intro text.
