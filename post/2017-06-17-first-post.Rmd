@@ -16,7 +16,7 @@ menu: main
 
 To kick things off, I want to share some details about how I created this site in case they're helpful for anyone else in the future. 
 
-I landed on the GitHub/Hugo workflow after some Google searching and went with it for a few reasons:  
+I landed on the GitHub/Hugo/blogdown workflow after some Google searching and went with it for a few reasons:  
 
 * I already had a GitHub account and wanted to get more practice using git, and take advantage of the free hosting options there.
 * Amber Thomas provides a [walkthrough](https://proquestionasker.github.io/blog/Making_Site/) of setting up a Hugo site using blogdown, and she made it look pretty simple. Her site is also an inspiring example.

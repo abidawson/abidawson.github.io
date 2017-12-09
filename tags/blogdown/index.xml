@@ -2,23 +2,23 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Blogdown on Explorations</title>
-    <link>/tags/blogdown/</link>
+    <link>https://abidawson.github.io/tags/blogdown/</link>
     <description>Recent content in Blogdown on Explorations</description>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>&amp;copy; 2017. All rights reserved.</copyright>
     <lastBuildDate>Mon, 19 Jun 2017 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/blogdown/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://abidawson.github.io/tags/blogdown/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Setting Up This Site</title>
-      <link>/post/setting-up/</link>
+      <link>https://abidawson.github.io/post/setting-up/</link>
       <pubDate>Mon, 19 Jun 2017 00:00:00 +0000</pubDate>
       
-      <guid>/post/setting-up/</guid>
+      <guid>https://abidawson.github.io/post/setting-up/</guid>
       <description>To kick things off, I want to share some details about how I created this site in case they’re helpful for anyone else in the future.
-I landed on the GitHub/Hugo workflow after some Google searching and went with it for a few reasons:
+I landed on the GitHub/Hugo/blogdown workflow after some Google searching and went with it for a few reasons:
  I already had a GitHub account and wanted to get more practice using git, and take advantage of the free hosting options there. Amber Thomas provides a walkthrough of setting up a Hugo site using blogdown, and she made it look pretty simple.</description>
     </item>
     
