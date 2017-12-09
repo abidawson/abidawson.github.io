@@ -6,10 +6,19 @@
     <description>Recent content in Posts on Explorations</description>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>&amp;copy; 2017. All rights reserved.</copyright>
-    <lastBuildDate>Mon, 19 Jun 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 09 Dec 2017 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://abidawson.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Visualizing Movie Dialog with ggplot2</title>
+      <link>https://abidawson.github.io/post/visualizing-movie-dialog/</link>
+      <pubDate>Sat, 09 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://abidawson.github.io/post/visualizing-movie-dialog/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Setting Up This Site</title>
