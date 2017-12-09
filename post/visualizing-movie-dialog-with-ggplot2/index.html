@@ -236,6 +236,17 @@
 </div>
 
   <p>Some intro text.</p>
+<pre class="r"><code>characters &lt;- read.delim(&quot;~/Documents/website/movie-dialog/movie-dialog-corpus/movie_characters_metadata.tsv&quot;,header=FALSE)
+names(characters) &lt;- c(&quot;charID&quot;,&quot;charName&quot;,&quot;movID&quot;,&quot;movTitle&quot;,&quot;gender&quot;,&quot;creditPosition&quot;)
+
+head(characters)</code></pre>
+<pre><code>##   charID charName movID                   movTitle gender creditPosition
+## 1     u0   BIANCA    m0 10 things i hate about you      f              4
+## 2     u1    BRUCE    m0 10 things i hate about you      ?              ?
+## 3     u2  CAMERON    m0 10 things i hate about you      m              3
+## 4     u3 CHASTITY    m0 10 things i hate about you      ?              ?
+## 5     u4     JOEY    m0 10 things i hate about you      m              6
+## 6     u5      KAT    m0 10 things i hate about you      f              2</code></pre>
 
 
   

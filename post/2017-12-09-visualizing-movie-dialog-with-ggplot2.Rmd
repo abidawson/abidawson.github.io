@@ -9,3 +9,11 @@ draft: true
 ---
 
 Some intro text.
+
+```{r}
+characters <- read.delim("~/Documents/website/movie-dialog/movie-dialog-corpus/movie_characters_metadata.tsv",header=FALSE)
+names(characters) <- c("charID","charName","movID","movTitle","gender","creditPosition")
+
+head(characters)
+```
+

@@ -2,21 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on Explorations</title>
-    <link>https://abidawson.github.io/post/</link>
+    <link>/post/</link>
     <description>Recent content in Posts on Explorations</description>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>&amp;copy; 2017. All rights reserved.</copyright>
-    <lastBuildDate>Mon, 19 Jun 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 09 Dec 2017 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://abidawson.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>Visualizing Movie Dialog with ggplot2</title>
+      <link>/post/visualizing-movie-dialog-with-ggplot2/</link>
+      <pubDate>Sat, 09 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/post/visualizing-movie-dialog-with-ggplot2/</guid>
+      <description>Some intro text.
+characters &amp;lt;- read.delim(&amp;quot;~/Documents/website/movie-dialog/movie-dialog-corpus/movie_characters_metadata.tsv&amp;quot;,header=FALSE) names(characters) &amp;lt;- c(&amp;quot;charID&amp;quot;,&amp;quot;charName&amp;quot;,&amp;quot;movID&amp;quot;,&amp;quot;movTitle&amp;quot;,&amp;quot;gender&amp;quot;,&amp;quot;creditPosition&amp;quot;) head(characters) ## charID charName movID movTitle gender creditPosition ## 1 u0 BIANCA m0 10 things i hate about you f 4 ## 2 u1 BRUCE m0 10 things i hate about you ? ? ## 3 u2 CAMERON m0 10 things i hate about you m 3 ## 4 u3 CHASTITY m0 10 things i hate about you ? ? ## 5 u4 JOEY m0 10 things i hate about you m 6 ## 6 u5 KAT m0 10 things i hate about you f 2 </description>
+    </item>
+    
+    <item>
       <title>Setting Up This Site</title>
-      <link>https://abidawson.github.io/post/setting-up/</link>
+      <link>/post/setting-up/</link>
       <pubDate>Mon, 19 Jun 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://abidawson.github.io/post/setting-up/</guid>
+      <guid>/post/setting-up/</guid>
       <description>To kick things off, I want to share some details about how I created this site in case they’re helpful for anyone else in the future.
 I landed on the GitHub/Hugo/blogdown workflow after some Google searching and went with it for a few reasons:
  I already had a GitHub account and wanted to get more practice using git, and take advantage of the free hosting options there. Amber Thomas provides a walkthrough of setting up a Hugo site using blogdown, and she made it look pretty simple.</description>
