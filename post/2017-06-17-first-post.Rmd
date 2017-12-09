@@ -11,7 +11,7 @@ Tags:
   - Hugo
   - GitHub
   - blogdown
-menu: main
+#menu: main
 ---
 
 To kick things off, I want to share some details about how I created this site in case they're helpful for anyone else in the future. 
