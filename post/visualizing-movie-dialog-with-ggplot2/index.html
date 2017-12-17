@@ -230,17 +230,50 @@
 </div>
 
   <p>Some intro text.</p>
+<pre class="r"><code>#ideas: length of dialogue, look at specific movies, compare men and women in older and newer movies</code></pre>
+<pre class="r"><code>library(ggplot2)
+library(stringr)
+theme_set(theme_bw())</code></pre>
 <pre class="r"><code>characters &lt;- read.delim(&quot;~/Documents/website/movie-dialog/movie-dialog-corpus/movie_characters_metadata.tsv&quot;,header=FALSE)
 names(characters) &lt;- c(&quot;charID&quot;,&quot;charName&quot;,&quot;movID&quot;,&quot;movTitle&quot;,&quot;gender&quot;,&quot;creditPosition&quot;)
 
-head(characters)</code></pre>
-<pre><code>##   charID charName movID                   movTitle gender creditPosition
-## 1     u0   BIANCA    m0 10 things i hate about you      f              4
-## 2     u1    BRUCE    m0 10 things i hate about you      ?              ?
-## 3     u2  CAMERON    m0 10 things i hate about you      m              3
-## 4     u3 CHASTITY    m0 10 things i hate about you      ?              ?
-## 5     u4     JOEY    m0 10 things i hate about you      m              6
-## 6     u5      KAT    m0 10 things i hate about you      f              2</code></pre>
+char_complete &lt;- subset(characters,gender !=&quot;?&quot; &amp; creditPosition != &quot;?&quot;)
+char_complete$movID &lt;- as.character(char_complete$movID)
+
+lines &lt;- read.delim(&quot;~/Documents/website/movie-dialog/movie-dialog-corpus/movie_lines.tsv&quot;,header=FALSE)
+names(lines) &lt;- c(&quot;lineID&quot;,&quot;charID&quot;,&quot;movID&quot;,&quot;charName&quot;,&quot;lineText&quot;)
+
+movies &lt;- read.delim(&quot;~/Documents/website/movie-dialog/movie-dialog-corpus/movie_titles_metadata.tsv&quot;,header=FALSE)
+names(movies) &lt;- c(&quot;movID&quot;,&quot;movTitle&quot;,&quot;movYear&quot;,&quot;movRating&quot;,&quot;movVotes&quot;,&quot;movGenres&quot;)
+movies$movYear &lt;- as.numeric(as.character(movies$movYear))</code></pre>
+<pre><code>## Warning: NAs introduced by coercion</code></pre>
+<pre class="r"><code>movies$movID &lt;- as.character(movies$movID)
+
+movies$movGenres &lt;- as.character(movies$movGenres)
+movies$movGenres &lt;- str_replace(movies$movGenres,&quot;\\[&quot;,&quot;&quot;)
+movies$movGenres &lt;- str_replace(movies$movGenres,&quot;\\]&quot;,&quot;&quot;)
+
+movies$movPrimGenre &lt;- sapply(strsplit(movies$movGenres,&quot; &quot;),`[`,1)
+movies$movPrimGenre &lt;- str_replace_all(movies$movPrimGenre,&quot;\\&#39;&quot;,&quot;&quot;)</code></pre>
+<pre class="r"><code>#movies by year
+g &lt;- ggplot(movies,aes(x=movYear)) + geom_histogram(stat=&quot;bin&quot;,binwidth = 5) + labs(x=&quot;Year&quot;,y=&quot;Number of Movies&quot;)
+g</code></pre>
+<pre><code>## Warning: Removed 17 rows containing non-finite values (stat_bin).</code></pre>
+<p><img src="/post/2017-12-09-visualizing-movie-dialog-with-ggplot2_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<pre class="r"><code>#movies by genre by year
+
+#characters by gender by year
+char_complete &lt;- merge(char_complete, movies[,c(&quot;movID&quot;,&quot;movYear&quot;)],by=&quot;movID&quot;,all.x = TRUE, all.y = FALSE)
+
+g &lt;- ggplot(char_complete,aes(x=movYear,fill=gender)) + geom_histogram(stat=&quot;bin&quot;,binwidth = 5,position=&quot;fill&quot;) + labs(x=&quot;Year&quot;,y=&quot;Proportion of Characters&quot;,fill=&quot;Gender&quot;) #might be better as just % female?
+g</code></pre>
+<pre><code>## Warning: Removed 75 rows containing non-finite values (stat_bin).</code></pre>
+<p><img src="/post/2017-12-09-visualizing-movie-dialog-with-ggplot2_files/figure-html/unnamed-chunk-4-2.png" width="672" /></p>
+<pre class="r"><code># g &lt;- ggplot(movies,aes(x=movYear,fill=movPrimGenre)) + geom_bar(stat=&quot;count&quot;) + labs(x=&quot;Year&quot;,y=&quot;Number of Movies&quot;)
+# g
+# 
+# g &lt;- ggplot(movies,aes(x=movYear,fill=movPrimGenre)) + geom_bar(stat=&quot;count&quot;,position=&quot;fill&quot;,binwidth=5) + labs(x=&quot;Year&quot;,y=&quot;Number of Movies&quot;)
+# g</code></pre>
 
 
   
