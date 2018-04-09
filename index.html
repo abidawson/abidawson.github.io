@@ -220,43 +220,6 @@
   
     <article>
   <header>
-    <h2><a href="/post/visualizing-movie-dialog-with-ggplot2/">Visualizing Movie Dialog with ggplot2</a></h2>
-
-    <div class="post-meta">
-
-  <div>
-    <i class="fa fa-calendar fa-fw"></i>
-    <time>09 Dec 2017, 00:00</time>
-  </div>
-
-  
-
-  
-
-  
-  
-  
-  
-
-</div>
-
-  </header>
-
-  <p>
-  Some intro text.
-#ideas: length of dialogue, look at specific movies, compare men and women in older and newer movies library(ggplot2) library(stringr) theme_set(theme_bw()) characters &lt;- read.delim(&quot;~/Documents/website/movie-dialog/movie-dialog-corpus/movie_characters_metadata.tsv&quot;,header=FALSE) names(characters) &lt;- c(&quot;charID&quot;,&quot;charName&quot;,&quot;movID&quot;,&quot;movTitle&quot;,&quot;gender&quot;,&quot;creditPosition&quot;) char_complete &lt;- subset(characters,gender !=&quot;?&quot; &amp; creditPosition != &quot;?&quot;) char_complete$movID &lt;- as.character(char_complete$movID) lines &lt;- read.delim(&quot;~/Documents/website/movie-dialog/movie-dialog-corpus/movie_lines.tsv&quot;,header=FALSE) names(lines) &lt;- c(&quot;lineID&quot;,&quot;charID&quot;,&quot;movID&quot;,&quot;charName&quot;,&quot;lineText&quot;) movies &lt;- read.delim(&quot;~/Documents/website/movie-dialog/movie-dialog-corpus/movie_titles_metadata.tsv&quot;,header=FALSE) names(movies) &lt;- c(&quot;movID&quot;,&quot;movTitle&quot;,&quot;movYear&quot;,&quot;movRating&quot;,&quot;movVotes&quot;,&quot;movGenres&quot;) movies$movYear &lt;- as.numeric(as.character(movies$movYear)) ## Warning: NAs introduced by coercion movies$movID &lt;- as.character(movies$movID) movies$movGenres &lt;- as.character(movies$movGenres) movies$movGenres &lt;- str_replace(movies$movGenres,&quot;\\[&quot;,&quot;&quot;) movies$movGenres &lt;- str_replace(movies$movGenres,&quot;\\]&quot;,&quot;&quot;) movies$movPrimGenre &lt;- sapply(strsplit(movies$movGenres,&quot; &quot;),`[`,1) movies$movPrimGenre &lt;- str_replace_all(movies$movPrimGenre,&quot;\\&#39;&quot;,&quot;&quot;) #movies by year g &lt;- ggplot(movies,aes(x=movYear)) + geom_histogram(stat=&quot;bin&quot;,binwidth = 5) + labs(x=&quot;Year&quot;,y=&quot;Number of Movies&quot;) g ## Warning: Removed 17 rows containing non-finite values (stat_bin).
-  </p>
-
-  
-  <footer>
-    <a href="/post/visualizing-movie-dialog-with-ggplot2/">Read more<i class="fa fa-angle-double-right fa-fw"></i></a>
-  </footer>
-  
-</article>
-
-  
-    <article>
-  <header>
     <h2><a href="/post/setting-up/">Setting Up This Site</a></h2>
 
     <div class="post-meta">

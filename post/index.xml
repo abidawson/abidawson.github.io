@@ -6,20 +6,10 @@
     <description>Recent content in Posts on Explorations</description>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>&amp;copy; 2017. All rights reserved.</copyright>
-    <lastBuildDate>Sat, 09 Dec 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 19 Jun 2017 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Visualizing Movie Dialog with ggplot2</title>
-      <link>/post/visualizing-movie-dialog-with-ggplot2/</link>
-      <pubDate>Sat, 09 Dec 2017 00:00:00 +0000</pubDate>
-      
-      <guid>/post/visualizing-movie-dialog-with-ggplot2/</guid>
-      <description>Some intro text.
-#ideas: length of dialogue, look at specific movies, compare men and women in older and newer movies library(ggplot2) library(stringr) theme_set(theme_bw()) characters &amp;lt;- read.delim(&amp;quot;~/Documents/website/movie-dialog/movie-dialog-corpus/movie_characters_metadata.tsv&amp;quot;,header=FALSE) names(characters) &amp;lt;- c(&amp;quot;charID&amp;quot;,&amp;quot;charName&amp;quot;,&amp;quot;movID&amp;quot;,&amp;quot;movTitle&amp;quot;,&amp;quot;gender&amp;quot;,&amp;quot;creditPosition&amp;quot;) char_complete &amp;lt;- subset(characters,gender !=&amp;quot;?&amp;quot; &amp;amp; creditPosition != &amp;quot;?&amp;quot;) char_complete$movID &amp;lt;- as.character(char_complete$movID) lines &amp;lt;- read.delim(&amp;quot;~/Documents/website/movie-dialog/movie-dialog-corpus/movie_lines.tsv&amp;quot;,header=FALSE) names(lines) &amp;lt;- c(&amp;quot;lineID&amp;quot;,&amp;quot;charID&amp;quot;,&amp;quot;movID&amp;quot;,&amp;quot;charName&amp;quot;,&amp;quot;lineText&amp;quot;) movies &amp;lt;- read.delim(&amp;quot;~/Documents/website/movie-dialog/movie-dialog-corpus/movie_titles_metadata.tsv&amp;quot;,header=FALSE) names(movies) &amp;lt;- c(&amp;quot;movID&amp;quot;,&amp;quot;movTitle&amp;quot;,&amp;quot;movYear&amp;quot;,&amp;quot;movRating&amp;quot;,&amp;quot;movVotes&amp;quot;,&amp;quot;movGenres&amp;quot;) movies$movYear &amp;lt;- as.numeric(as.character(movies$movYear)) ## Warning: NAs introduced by coercion movies$movID &amp;lt;- as.character(movies$movID) movies$movGenres &amp;lt;- as.character(movies$movGenres) movies$movGenres &amp;lt;- str_replace(movies$movGenres,&amp;quot;\\[&amp;quot;,&amp;quot;&amp;quot;) movies$movGenres &amp;lt;- str_replace(movies$movGenres,&amp;quot;\\]&amp;quot;,&amp;quot;&amp;quot;) movies$movPrimGenre &amp;lt;- sapply(strsplit(movies$movGenres,&amp;quot; &amp;quot;),`[`,1) movies$movPrimGenre &amp;lt;- str_replace_all(movies$movPrimGenre,&amp;quot;\\&amp;#39;&amp;quot;,&amp;quot;&amp;quot;) #movies by year g &amp;lt;- ggplot(movies,aes(x=movYear)) + geom_histogram(stat=&amp;quot;bin&amp;quot;,binwidth = 5) + labs(x=&amp;quot;Year&amp;quot;,y=&amp;quot;Number of Movies&amp;quot;) g ## Warning: Removed 17 rows containing non-finite values (stat_bin).</description>
-    </item>
     
     <item>
       <title>Setting Up This Site</title>

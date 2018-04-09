@@ -1,0 +1,67 @@
+---
+title: Visualizing Movie Dialog with ggplot2
+author: Abi Dawson
+date: '2017-12-09'
+slug: visualizing-movie-dialog-with-ggplot2
+categories: []
+tags: []
+draft: true
+---
+
+Some intro text.
+
+```{r}
+#ideas: length of dialogue, look at specific movies, compare men and women in older and newer movies
+#todo: color palette and theme
+```
+
+```{r}
+library(ggplot2)
+library(stringr)
+theme_set(theme_bw())
+```
+
+
+```{r}
+characters <- read.delim("~/Documents/website/movie-dialog/movie-dialog-corpus/movie_characters_metadata.tsv",header=FALSE)
+names(characters) <- c("charID","charName","movID","movTitle","gender","creditPosition")
+
+char_complete <- subset(characters,gender !="?" & creditPosition != "?")
+char_complete$movID <- as.character(char_complete$movID)
+
+lines <- read.delim("~/Documents/website/movie-dialog/movie-dialog-corpus/movie_lines.tsv",header=FALSE)
+names(lines) <- c("lineID","charID","movID","charName","lineText")
+
+movies <- read.delim("~/Documents/website/movie-dialog/movie-dialog-corpus/movie_titles_metadata.tsv",header=FALSE)
+names(movies) <- c("movID","movTitle","movYear","movRating","movVotes","movGenres")
+movies$movYear <- as.numeric(as.character(movies$movYear))
+movies$movID <- as.character(movies$movID)
+
+movies$movGenres <- as.character(movies$movGenres)
+movies$movGenres <- str_replace(movies$movGenres,"\\[","")
+movies$movGenres <- str_replace(movies$movGenres,"\\]","")
+
+movies$movPrimGenre <- sapply(strsplit(movies$movGenres," "),`[`,1)
+movies$movPrimGenre <- str_replace_all(movies$movPrimGenre,"\\'","")
+
+```
+
+```{r}
+#movies by year
+g <- ggplot(movies,aes(x=movYear)) + geom_histogram(stat="bin",binwidth = 5) + labs(x="Year",y="Number of Movies")
+g
+#movies by genre by year
+
+#characters by gender by year
+char_complete <- merge(char_complete, movies[,c("movID","movYear")],by="movID",all.x = TRUE, all.y = FALSE)
+
+g <- ggplot(char_complete,aes(x=movYear,fill=gender)) + geom_histogram(stat="bin",binwidth = 5,position="fill") + labs(x="Year",y="Proportion of Characters",fill="Gender") #might be better as just % female?
+g
+
+# g <- ggplot(movies,aes(x=movYear,fill=movPrimGenre)) + geom_bar(stat="count") + labs(x="Year",y="Number of Movies")
+# g
+# 
+# g <- ggplot(movies,aes(x=movYear,fill=movPrimGenre)) + geom_bar(stat="count",position="fill",binwidth=5) + labs(x="Year",y="Number of Movies")
+# g
+```
+
