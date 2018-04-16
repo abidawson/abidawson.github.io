@@ -1,0 +1,194 @@
+---
+title: "Interactive Mapping using Shapefiles and Plotly"
+author: Abi Dawson
+date: '2018-04-15'
+slug: interactive-mapping
+categories: []
+tags: []
+Categories:
+Description: 
+Tags:
+  - Shapefiles
+  - Plotly
+  - Interactive
+#image_preview: "mapping-shapefiles.png"
+thumbnailImagePosition: left
+thumbnailImage: mapping-shapefiles.png
+metaAlignment: center
+---
+
+There are many packages and options to display data on maps, but until recently I'd never worked with shapefiles as a way to receive and work with spatial objects. A friend asked me to create an interactive map of state congressional districts using some political data, and it gave me an opportunity to learn a lot about plotting with shapefiles.
+
+### The Shapefiles  
+
+I worked with shapefiles from Daily Kos Elections. The district and state border shapefiles can be found [here](https://docs.google.com/spreadsheets/d/1LrBXlqrtSZwyYOkpEEXFwQggvtR0bHHTxs9kq4kjOjw/edit#gid=1250379179). With a traditional map of congressional districts, it's hard to distinguish districts in urban areas. With the Daily Kos hexmap, all the districts are represented with equal area, and states are sized according to the number of congressional districts they contain. You can read more about the approach at their [website](https://www.dailykos.com/stories/2015/06/03/1389806/-Daily-Kos-Elections-presents-the-best-map-ever-of-United-States-congressional-districts).
+
+I read in the congressional district shapefiles using the `rgdal` package, to get a SpatialPolygonsDataFrame. We'll work with the state border shapefiles later.
+
+```{r setup, include = FALSE}
+library(rgdal)    # R wrapper around GDAL/OGR
+library(readr) #for parse_number
+library(rgeos)    #need this to effectively fortify
+library(ggplot2)  # for general plotting
+library(magrittr) #pipe
+library(plotly)   #interactive
+library(shiny)    #div
+library(cleangeo)
+```
+
+
+
+```{r}
+cdshapes <- readOGR("../../../datasets/maps/HexCDv11/", "HexCDv11")
+str(cdshapes, max.level = 2)
+```
+
+We can check that it worked by plotting `cdshapes` directly:
+
+```{r}
+plot(cdshapes)
+```
+
+### The PVI Data  
+
+The congressional district shapefile data looks good so far, but it will be more interesting to merge in some data to add to our plot, such as adding a color fill to each district. I decided to use the Partisan Voting Index from 2017, which is a measure of how far toward one party a congressional district (or state) leans compared to the nation as a whole. I downloaded the PVI data from the [Cook Political Report](http://cookpolitical.com/index.php/pvi-map-and-district-list) as a csv.
+
+After reading in the data, I did a little cleaning to ready the data for merging with the cdshapes data, and to create some variables for my map.
+
+```{r, warning = FALSE}
+pvi <- read.csv("../../../datasets/cook_pvi/pvi-data.csv",header = TRUE, stringsAsFactors = FALSE)
+pvi$District <- gsub("-0","-",pvi$X)
+
+#split the PVI into party and points
+pvi$Party <- ifelse(pvi$PVI=="EVEN","EVEN",ifelse(grepl("R",pvi$PVI),"R","D"))
+pvi$Points <- ifelse(pvi$PVI != "EVEN",parse_number(pvi$PVI),0)
+pvi$divergingPoints <- ifelse(pvi$Party %in% c("EVEN","R"),pvi$Points,-pvi$Points) 
+
+```
+
+### Merging the Data
+
+First I used the `merge` function from the `sp` package to merge my PVI data directly into the data slot in my SpatialPolygonsDataFrame, `cdshapes`. 
+
+```{r}
+cdshapes@data$CDLABELMOD <- gsub("AK|DE|MT|ND|SD|VT|WY","AL",cdshapes@data$CDLABEL) #change in notation for at large districts
+cdshapes@data$District <- paste(cdshapes@data$STATENAME,cdshapes@data$CDLABELMOD,sep="-")
+cdshapes <- sp::merge(cdshapes,pvi,by="District")
+```
+
+I knew I wanted to plot the data using `ggplot` because I'm familiar with it and it works well with Plotly for the interactive features. To do that, I needed to get the SpatialPolygonsDataFrame into a flat, rectangular format for plotting. The `fortify` function in `ggplot2` makes this possible with minimal effort. The data attributes don't automatically get added to the dataframe, but we can merge them in using the "id" field.
+
+```{r, include=TRUE}
+cdshapes@data$id = rownames(cdshapes@data)
+cdshapes_df <- ggplot2::fortify(cdshapes,region="id")
+
+cdshapes_df <- merge(cdshapes_df,cdshapes@data[,c("id","divergingPoints")], by="id")
+
+head(cdshapes_df)
+
+```
+
+### Plotting the Map
+
+Great, now we're ready to plot our map with the PVI data. I picked a red-blue color mapping to correspond to the typical categories of Republican and Democrat.
+
+```{r}
+map <- ggplot() +
+geom_polygon(data = cdshapes_df, 
+          aes(x = long, y = lat, group = group,fill=divergingPoints),
+          color = 'black',  size = .2) + 
+          theme_void() +
+          scale_fill_distiller(palette="RdBu",limits = c(-max(abs(cdshapes_df$divergingPoints)), max(abs(cdshapes_df$divergingPoints)))) +#set a diverging and balanced gradient
+          labs(fill="PVI")
+map
+```
+
+Starting to look good! But it might be useful to add some labels to the congressional districts, maybe the district number. To label those in the center of each polygon, we need to pull the centroid coordinates out of each of the polygon objects, each of which have a slot called "labpt" that contains the center coordinates. We can pull out out for each polygon using purrr and merge it into a new dataframe with the polygons' data attributes.
+
+```{r, warning = FALSE}
+polys <- as(cdshapes, "SpatialPolygons")
+
+centroid <- function(i, polys) {
+  ctr <- Polygon(polys[i])@labpt
+  data.frame(long_c=ctr[1], lat_c=ctr[2])
+}
+centroids <- seq_along(polys) %>% purrr::map_df(centroid, polys=polys)
+
+cdshapes_data <- cdshapes@data
+cdshapes_data <- data.frame(cdshapes_data,centroids)
+
+```
+
+Then we can add the labels as an additional layer on the plot using `geom_text()`. Note that I'm specifying a new data argument for this layer, so that we only label one point for each district.
+
+```{r}
+
+map <- ggplot() +
+geom_polygon(data = cdshapes_df, 
+          aes(x = long, y = lat, group = group,fill=divergingPoints),
+          color = 'black',  size = .2) + 
+          theme_void() +
+          scale_fill_distiller(palette="RdBu",limits = c(-max(abs(cdshapes_df$divergingPoints)), max(abs(cdshapes_df$divergingPoints)))) +
+          geom_text(data=cdshapes_data,aes(x = long_c, y = lat_c,label = CDLABEL),size = 2) + 
+          labs(fill="PVI")
+map
+
+```
+
+It might also be helpful to add state borders to the plot, so that it's easier to tell which districts are in which states. Daily Kos makes the state border shapefiles available as well, so we can complete the same steps as before to read them in and flatten them. However, this time ggfortify gives an error telling us that one of our polygons has an invalid number of points.
+
+```{r, error = TRUE}
+stateshapes <- readOGR("../../../datasets/maps/HexSTv11/", "HexSTv11")
+str(stateshapes, max.level = 2)
+
+stateshapes@data$id = rownames(stateshapes@data)
+stateshapes_df <- ggplot2::fortify(stateshapes,region="id") 
+
+```
+
+Luckily, we can use the `clgeo_Clean` function from the `cleangeo` package to remove the offending polygon and proceed to add our state shapes as yet another `geom_polygon` layer in the map:
+
+```{r}
+stateshapes <- clgeo_Clean(stateshapes) #clean the invalid polygon
+stateshapes_df <- ggplot2::fortify(stateshapes,region="id") #no error
+
+map <- ggplot() +
+geom_polygon(data = cdshapes_df, 
+          aes(x = long, y = lat, group = group,fill=divergingPoints),
+          color = 'black',  size = .2) + 
+          geom_polygon(data = stateshapes_df, aes(x = long, y = lat, group = group),size = .6,fill = NA,color='black') +
+          geom_text(data=cdshapes_data,aes(x = long_c, y = lat_c,label = CDLABEL),size = 2) +
+          theme_void() +
+          scale_fill_distiller(palette="RdBu",limits = c(-max(abs(cdshapes_df$divergingPoints)), max(abs(cdshapes_df$divergingPoints)))) +
+          labs(fill="PVI")
+map
+
+```
+
+### Make it Interactive  
+
+The last step for this project was to add some interactivity, so my user could see the exact PVI value of each district along with some additional information. To start, I can just call my ggplot map within `ggplotly` to quickly get an interactive version with tooltips. `ggplotly` also allows the user to zoom, pan, and capture images of the plot as needed.
+
+```{r, message = FALSE}
+ggplotly(map)
+```
+
+Unfortunately, the tooltips include some information that isn't that useful (like the coordinates) and are missing some information that isn't displayed on the map, but would be useful (like the PVI with the party and the current representative). We can add those by specifying them as additional labels to the `geom_text` layer, and then passing the ones we want to display into the `tooltip` argument of `ggplotly`. And we have our final map!
+
+```{r, warning=FALSE, message = FALSE}
+map <- ggplot() +
+geom_polygon(data = cdshapes_df, 
+          aes(x = long, y = lat, group = group,fill=divergingPoints),
+          color = 'black',  size = .2) + 
+          geom_polygon(data = stateshapes_df, aes(x = long, y = lat, group = group),size = .6,fill = NA,color='black') +
+          geom_text(data=cdshapes_data,aes(x = long_c, y = lat_c,label = CDLABEL,label2=District,label3=PVI,label4=MEMBER),size = 2) + 
+          theme_void() +
+          scale_fill_distiller(palette="RdBu",limits = c(-max(abs(cdshapes_df$divergingPoints)), max(abs(cdshapes_df$divergingPoints)))) +#set a diverging gradient
+          labs(fill="PVI")
+
+
+ggplotly(map,tooltip = c("label2","label3","label4"))
+
+```
+
+
